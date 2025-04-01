@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Database {
-    private static HashMap<Integer, Validator> validators;
+    private static HashMap<Integer, Validator> validators = new HashMap<>();
 
     private static ArrayList<Entity> entities = new ArrayList<>();
 
