@@ -4,6 +4,7 @@ import example.*;
 
 public class Main {
     public static void main(String[] args) throws InvalidEntityException {
+        Database.registerValidator(Document.DOCUMENT_ENTITY_CODE, new ValidValidator());
 
         Document doc = new Document("Eid Eid Eid");
 
