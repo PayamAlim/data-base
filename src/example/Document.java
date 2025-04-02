@@ -19,8 +19,8 @@ public class Document extends Entity implements Trackable {
     public Document copy() {
         Document copyDocument = new Document(content);
         copyDocument.id = id;
-        copyDocument.setCreationDate(creationDate);
-        copyDocument.setLastModificationDate(lastModificationDate);
+        copyDocument.creationDate = new Date(creationDate.getTime());
+        copyDocument.lastModificationDate = new Date(lastModificationDate.getTime());
 
         return copyDocument;
     }

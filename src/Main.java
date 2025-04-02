@@ -10,6 +10,8 @@ public class Main {
 
         Database.add(doc);
 
+        Document doc2 = doc.copy();
+
         System.out.println("Document added");
 
         System.out.println("id: " + doc.id);
@@ -33,5 +35,11 @@ public class Main {
         System.out.println("content: " + doc.getContent());
         System.out.println("creation date: " + doc.getCreationDate());
         System.out.println("last modification date: " + doc.getLastModificationDate());
+
+        System.out.println("Document updated");
+        System.out.println("id: " + doc2.id);
+        System.out.println("content: " + doc2.getContent());
+        System.out.println("creation date: " + doc2.getCreationDate());
+        System.out.println("last modification date: " + doc2.getLastModificationDate());
     }
 }
