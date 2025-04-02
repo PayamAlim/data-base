@@ -12,7 +12,7 @@ public class Animal extends Entity {
     }
 
     @Override
-    public Entity copy() {
+    public Animal copy() {
         Animal copyAnimal = new Animal(age);
         copyAnimal.id = id;
 
