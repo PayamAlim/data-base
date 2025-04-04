@@ -14,6 +14,11 @@ public class Step extends Entity {
     public int taskRef;
     public Status status;
 
+    public Step(int taskRef, String title) {
+        this.taskRef = taskRef;
+        this.title = title;
+    }
+
     @Override
     public Entity copy() {
         return null;
