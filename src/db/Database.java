@@ -68,4 +68,12 @@ public class Database {
         if (!contain)
             throw new EntityNotFoundException(e.id);
     }
+
+    public static ArrayList<Entity> getAll(int entityCode) {
+        ArrayList<Entity> specialEntities = new ArrayList<>();
+        for (Entity e: entities)
+            if (e.getEntityCode() == entityCode)
+                specialEntities.add(e.copy());
+        return specialEntities;
+    }
 }
