@@ -1,6 +1,7 @@
 package todo.service;
 
 import db.Database;
+import db.exception.EntityNotFoundException;
 import db.exception.InvalidEntityException;
 import todo.entity.Step;
 
@@ -13,7 +14,7 @@ public class StepService {
         try {
             Database.add(newStep);
         }
-        catch (IllegalArgumentException | InvalidEntityException e) {
+        catch (IllegalArgumentException | InvalidEntityException | EntityNotFoundException e) {
             System.out.println("Cannot save step\nError: " + e.getMessage());
             haveException = true;
         }
