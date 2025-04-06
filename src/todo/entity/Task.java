@@ -21,9 +21,21 @@ public class Task extends Entity implements Trackable {
 
     public Status status;
 
+    public Task(String title, String description, Date dueDate) {
+        this.title = title;
+        this.description = description;
+        this.dueDate = new Date(dueDate.getTime());
+    }
+
     @Override
-    public Entity copy() {
-        return null;
+    public Task copy() {
+        Task copyTask = new Task(title, description, dueDate);
+        copyTask.id = id;
+        copyTask.status = status;
+        copyTask.creationDate = new Date(creationDate.getTime());
+        copyTask.lastModificationDate = new Date(lastModificationDate.getTime());
+
+        return copyTask;
     }
 
     @Override

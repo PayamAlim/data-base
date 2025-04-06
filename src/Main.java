@@ -1,45 +1,56 @@
-import db .*;
+import db.*;
 import db.exception.*;
-import example.*;
+
+import todo.entity.*;
+import todo.validator.*;
+import todo.service.*;
+
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws InvalidEntityException {
-        Database.registerValidator(Document.DOCUMENT_ENTITY_CODE, new ValidValidator());
+        Database.registerValidator(Task.TASK_ENTITY_CODE, new TaskValidator());
+        Database.registerValidator(Step.STEP_ENTITY_CODE, new StepValidator());
 
-        Document doc = new Document("Eid Eid Eid");
+        var scn = new Scanner(System.in);
+        String operation;
+        do {
+            operation = scn.next();
+            if (operation.equals("add")) {
+                String object = scn.nextLine();
+                if (object.equals(" task")) {
+                    System.out.print("Title: ");
+                    String title = scn.nextLine();
 
-        Database.add(doc);
+                    System.out.print("Description: ");
+                    String description = scn.nextLine();
 
-        Document doc2 = doc.copy();
+                    System.out.print("Due date: ");
+                    String date = scn.next();
+                    String[] subDate = date.split("-");
+                    int year = Integer.parseInt(subDate[0]);
+                    int month = Integer.parseInt(subDate[1]);
+                    int day = Integer.parseInt(subDate[2]);
+                    Date dueDate = new Date(year, month, day);
 
-        System.out.println("Document added");
+                    TaskService.saveTask(title, description, dueDate);
+                }
+                else if (object.equals(" step")) {
+                    System.out.print("TaskID: ");
+                    int taskId = scn.nextInt();
 
-        System.out.println("id: " + doc.id);
-        System.out.println("content: " + doc.getContent());
-        System.out.println("creation date: " + doc.getCreationDate());
-        System.out.println("last modification date: " + doc.getLastModificationDate());
-        System.out.println();
+                    scn.nextLine();
+                    System.out.print("Title: ");
+                    String title = scn.nextLine();
 
-        try {
-            Thread.sleep(30_000);
-        } catch (InterruptedException e) {
-            System.out.println("Sleep interrupted!");
-        }
-
-        doc.setContent("This is the new content");
-
-        Database.update(doc);
-
-        System.out.println("Document updated");
-        System.out.println("id: " + doc.id);
-        System.out.println("content: " + doc.getContent());
-        System.out.println("creation date: " + doc.getCreationDate());
-        System.out.println("last modification date: " + doc.getLastModificationDate());
-
-        System.out.println("Document updated");
-        System.out.println("id: " + doc2.id);
-        System.out.println("content: " + doc2.getContent());
-        System.out.println("creation date: " + doc2.getCreationDate());
-        System.out.println("last modification date: " + doc2.getLastModificationDate());
+                    StepService.saveStep(taskId, title);
+                }
+                else {
+                    System.out.println("There is no such operation!");
+                }
+            }
+            if (operation.equals("exit"))
+                System.out.println("Successfully logged out");
+        } while (!operation.equals("exit"));
     }
 }
