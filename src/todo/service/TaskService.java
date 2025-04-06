@@ -1,9 +1,13 @@
 package todo.service;
 
 import db.Database;
+import db.Entity;
+import db.exception.EntityNotFoundException;
 import db.exception.InvalidEntityException;
+import todo.entity.Step;
 import todo.entity.Task;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class TaskService {
@@ -21,6 +25,14 @@ public class TaskService {
         }
         if (!haveException)
             System.out.println("Task saved successfully\nID: " + newTask.id);
+    }
+
+    public static void removeTask(int id) {
+        Database.delete(id);
+        ArrayList<Entity> steps = Database.getAll(Step.STEP_ENTITY_CODE);
+        for (Entity step: steps)
+            if (step.id == id)
+                Database.delete(id);
     }
 
     public static void setAsCompleted(int taskId) throws InvalidEntityException {

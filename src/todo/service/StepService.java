@@ -20,4 +20,8 @@ public class StepService {
         if (!haveException)
             System.out.println("Step saved successfully\nID: " + newStep.id + "\nCreation Date: " + newStep.getCreationDate());
     }
+
+    public static void removeStep(int id) {
+        Database.delete(id);
+    }
 }
