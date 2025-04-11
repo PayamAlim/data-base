@@ -7,6 +7,7 @@ import db.exception.InvalidEntityException;
 import todo.entity.Step;
 import todo.entity.Task;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -281,16 +282,12 @@ public class TaskService {
         if (entity instanceof Task) {
             Task task = (Task) entity;
 
-            String year = String.valueOf(task.dueDate.getYear());
-            String month = String.valueOf(task.dueDate.getMonth());
-            String day = String.valueOf(task.dueDate.getDay());
-
-            if (month.length() < 2) month = "0" + month;
-            if (day.length() < 2) day = "0" + day;
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String formatedDate = formatter.format(((Task) entity).dueDate);
 
             System.out.println("ID: " + id + "\n" +
                     "Title: " + task.title + "\n" +
-                    "Due Date: " + year + "-" + month + "-" + day + "\n" +
+                    "Due Date: " + formatedDate + "\n" +
                     "Status: " + task.status);
 
             ArrayList<Entity> steps = Database.getAll(Step.STEP_ENTITY_CODE);

@@ -5,6 +5,8 @@ import todo.entity.*;
 import todo.validator.*;
 import todo.service.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Main {
@@ -25,13 +27,17 @@ public class Main {
                     System.out.print("Description: ");
                     String description = scn.nextLine();
 
-                    System.out.print("Due date (yyyy-mm-dd): ");
-                    String date = scn.next();
-                    String[] subDate = date.split("-");
-                    int year = Integer.parseInt(subDate[0]);
-                    int month = Integer.parseInt(subDate[1]);
-                    int day = Integer.parseInt(subDate[2]);
-                    Date dueDate = new Date(year, month, day);
+                    System.out.print("Due Date (yyyy-mm-dd): ");
+                    String date = scn.nextLine();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+                    Date dueDate = null;
+                    try {
+                        dueDate = formatter.parse(date);
+                    } catch (ParseException e) {
+                        System.out.println("Invalid date format");
+                        return;
+                    }
 
                     TaskService.saveTask(title, description, dueDate);
                 }
@@ -94,12 +100,16 @@ public class Main {
                         if (newValue.equals("InProgress")) TaskService.setAsInProgress(id);
                         if (newValue.equals("Completed")) TaskService.setAsCompleted(id);
                     }
-                    else if (field.equals("due date")) {
-                        String[] subDate = newValue.split("-");
-                        int year = Integer.parseInt(subDate[0]);
-                        int month = Integer.parseInt(subDate[1]);
-                        int day = Integer.parseInt(subDate[2]);
-                        Date newDueDate = new Date(year, month, day);
+                    else if (field.equals("dueDate")) {
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+                        Date newDueDate = null;
+                        try {
+                            newDueDate = formatter.parse(newValue);
+                        } catch (ParseException e) {
+                            System.out.println("Invalid date format");
+                            return;
+                        }
 
                         TaskService.setDueDate(id, newDueDate);
                     }
@@ -116,7 +126,7 @@ public class Main {
                     System.out.print("Field: ");
                     String field = scn.nextLine();
 
-                    System.out.print("New Value ((yyyy-mm-dd) format for due date): ");
+                    System.out.print("New Value: ");
                     String newValue = scn.nextLine();
 
                     if (field.equals("title"))
