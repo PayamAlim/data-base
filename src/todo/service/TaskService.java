@@ -67,15 +67,15 @@ public class TaskService {
                 return;
             }
 
-            System.out.println("Successfully updated the task.\n" +
+            System.out.println("* Successfully updated the task.\n" +
                     "Field: status\n" +
                     "Old Value: " + oldStatus + "\n" +
                     "New Value: Completed" + "\n" +
-                    "Modification Date: " + task.getLastModificationDate());
+                    "Modification Date: " + task.getLastModificationDate() + "\n");
         }
         else
             System.out.println("Cannot update task with ID = " + id + ".\n" +
-                    "Error: This id is not a step");
+                    "Error: This id is not a task");
     }
 
     public static void setAsInProgress(int id) throws InvalidEntityException {
@@ -104,15 +104,15 @@ public class TaskService {
                 return;
             }
 
-            System.out.println("Successfully updated the task.\n" +
+            System.out.println("* Successfully updated the task.\n" +
                     "Field: status\n" +
                     "Old Value: " + oldStatus + "\n" +
                     "New Value: InProgress" + "\n" +
-                    "Modification Date: " + task.getLastModificationDate());
+                    "Modification Date: " + task.getLastModificationDate() + "\n");
         }
         else
-                System.out.println("Cannot update task with ID = " + id + ".\n" +
-            "Error: This id is not a step");
+            System.out.println("Cannot update task with ID = " + id + ".\n" +
+                    "Error: This id is not a task");
     }
 
     public static void setAsNotStarted(int id) throws InvalidEntityException {
@@ -140,15 +140,15 @@ public class TaskService {
                 return;
             }
 
-            System.out.println("Successfully updated the task.\n" +
+            System.out.println("* Successfully updated the task.\n" +
                     "Field: status\n" +
                     "Old Value: " + oldStatus + "\n" +
                     "New Value: NotStarted" + "\n" +
-                    "Modification Date: " + task.getLastModificationDate());
+                    "Modification Date: " + task.getLastModificationDate() + "\n");
         }
         else
             System.out.println("Cannot update task with ID = " + id + ".\n" +
-                    "Error: This id is not a step");
+                    "Error: This id is not a task");
     }
 
     public static void setTitle(int id, String newTitle) throws InvalidEntityException {
@@ -176,15 +176,15 @@ public class TaskService {
                 return;
             }
 
-            System.out.println("Successfully updated the task.\n" +
+            System.out.println("* Successfully updated the task.\n" +
                     "Field: title\n" +
                     "Old Value: " + oldTitle + "\n" +
                     "New Value: " + newTitle + "\n" +
-                    "Modification Date: " + task.getLastModificationDate());
+                    "Modification Date: " + task.getLastModificationDate() + "\n");
         }
         else
             System.out.println("Cannot update task with ID = " + id + ".\n" +
-                    "Error: This id is not a step");
+                    "Error: This id is not a task");
     }
 
     public static void setDescription(int id, String newDescription) throws InvalidEntityException {
@@ -211,15 +211,15 @@ public class TaskService {
                 return;
             }
 
-            System.out.println("Successfully updated the task.\n" +
+            System.out.println("* Successfully updated the task.\n" +
                     "Field: description\n" +
                     "Old Value: " + oldDescription + "\n" +
                     "New Value: " + newDescription + "\n" +
-                    "Modification Date: " + task.getLastModificationDate());
+                    "Modification Date: " + task.getLastModificationDate() + "\n");
         }
         else
             System.out.println("Cannot update task with ID = " + id + ".\n" +
-                    "Error: This id is not a step");
+                    "Error: This id is not a task");
     }
 
     public static void setDueDate(int id, Date newDueDate) throws InvalidEntityException {
@@ -246,11 +246,11 @@ public class TaskService {
                 return;
             }
 
-            System.out.println("Successfully updated the task.\n" +
+            System.out.println("* Successfully updated the task.\n" +
                     "Field: dueDate\n" +
                     "Old Value: " + oldDate + "\n" +
                     "New Value: " + newDueDate + "\n" +
-                    "Modification Date: " + task.getLastModificationDate());
+                    "Modification Date: " + task.getLastModificationDate() + "\n");
         }
         else
             System.out.println("Cannot update task with ID = " + id + ".\n" +
@@ -263,5 +263,41 @@ public class TaskService {
             if (((Step) step).taskRef == taskId && ((Step) step).status != Step.Status.Completed)
                 return false;
         return true;
+    }
+
+    public static void printTask(int id) {
+        Entity entity = null;
+        try {
+            entity = Database.get(id);
+        }
+        catch (EntityNotFoundException e) {
+            System.out.println("No entity with ID = " + id);
+            return;
+        }
+
+        if (entity instanceof Task) {
+            Task task = (Task) entity;
+
+            String year = String.valueOf(task.dueDate.getYear());
+            String month = String.valueOf(task.dueDate.getMonth());
+            String day = String.valueOf(task.dueDate.getDay());
+
+            if (month.length() < 2) month = "0" + month;
+            if (day.length() < 2) day = "0" + day;
+
+            System.out.println("ID: " + id + "\n" +
+                    "Title: " + task.title + "\n" +
+                    "Due Date: " + year + "-" + month + "-" + day + "\n" +
+                    "Status: " + task.status);
+
+            ArrayList<Entity> steps = Database.getAll(Step.STEP_ENTITY_CODE);
+
+
+            for (Entity step: steps)
+                if (((Step) step).taskRef == id)
+                    StepService.printStep((Step) step);
+        }
+        else
+            System.out.println("ID = " + id + " is not for a task");
     }
 }

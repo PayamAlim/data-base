@@ -135,6 +135,34 @@ public class Main {
                     System.out.println("There is no such object!");
             }
 
+            else if (operation.equals("get")) {
+                String obj = scn.nextLine();
+
+                ArrayList<Entity> tasks = Database.getAll(Task.TASK_ENTITY_CODE);
+
+                if (obj.equals(" task-by-id")) {
+                    System.out.print("ID: ");
+                    int id = scn.nextInt();
+                    scn.nextLine();
+
+                    TaskService.printTask(id);
+                }
+
+                else if (obj.equals(" all-tasks")) {
+                    for (Entity task: tasks)
+                        TaskService.printTask(task.id);
+                }
+
+                else if (obj.equals("incomplete-tasks")) {
+                    for (Entity task: tasks)
+                        if (((Task) task).status != Task.Status.Completed)
+                            TaskService.printTask(task.id);
+                }
+
+                else
+                    System.out.println("There is no such object!");
+            }
+
             else if (operation.equals("exit"))
                 System.out.println("Successfully logged out");
 

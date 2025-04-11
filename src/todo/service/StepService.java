@@ -32,7 +32,7 @@ public class StepService {
             entity = Database.get(id);
         }
         catch (EntityNotFoundException e) {
-            System.out.println("Cannot update task with ID = " + id + ".\n" +
+            System.out.println("Cannot update step with ID = " + id + ".\n" +
                     "Error: " + e.getMessage());
             return;
         }
@@ -42,29 +42,29 @@ public class StepService {
             String oldStatus = String.valueOf(step.status);
             step.status = Step.Status.Completed;
 
+            try {
+                Database.update(step);
+            } catch (InvalidEntityException | EntityNotFoundException | IllegalArgumentException e) {
+                System.out.println("Cannot update step with ID = " + id + ".\n" +
+                        "Error: " + e.getMessage());
+                return;
+            }
+
+            System.out.println("* Successfully updated the step.\n" +
+                    "Field: status\n" +
+                    "Old Value: " + oldStatus + "\n" +
+                    "New Value: Completed" + "\n" +
+                    "Modification Date: " + step.getLastModificationDate() + "\n");
+
             Task taskRef = (Task) Database.get(step.taskRef);
 
             if (taskRef.status == Task.Status.NotStarted)
                 TaskService.setAsInProgress(taskRef.id);
             else if (TaskService.isCompleted(taskRef.id))
                 TaskService.setAsCompleted(taskRef.id);
-
-            try {
-                Database.update(step);
-            } catch (InvalidEntityException | EntityNotFoundException | IllegalArgumentException e) {
-                System.out.println("Cannot update task with ID = " + id + ".\n" +
-                        "Error: " + e.getMessage());
-                return;
-            }
-
-            System.out.println("Successfully updated the task.\n" +
-                    "Field: status\n" +
-                    "Old Value: " + oldStatus + "\n" +
-                    "New Value: Completed" + "\n" +
-                    "Modification Date: " + step.getLastModificationDate());
         }
         else
-            System.out.println("Cannot update task with ID = " + id + ".\n" +
+            System.out.println("Cannot update step with ID = " + id + ".\n" +
                     "Error: This id is not a step");
     }
 
@@ -74,7 +74,7 @@ public class StepService {
             entity = Database.get(id);
         }
         catch (EntityNotFoundException e) {
-            System.out.println("Cannot update task with ID = " + id + ".\n" +
+            System.out.println("Cannot update step with ID = " + id + ".\n" +
                     "Error: " + e.getMessage());
             return;
         }
@@ -87,19 +87,19 @@ public class StepService {
             try {
                 Database.update(step);
             } catch (InvalidEntityException | EntityNotFoundException | IllegalArgumentException e) {
-                System.out.println("Cannot update task with ID = " + id + ".\n" +
+                System.out.println("Cannot update step with ID = " + id + ".\n" +
                         "Error: " + e.getMessage());
                 return;
             }
 
-            System.out.println("Successfully updated the task.\n" +
+            System.out.println("* Successfully updated the step.\n" +
                     "Field: status\n" +
                     "Old Value: " + oldStatus + "\n" +
                     "New Value: NotStarted" + "\n" +
-                    "Modification Date: " + step.getLastModificationDate());
+                    "Modification Date: " + step.getLastModificationDate() + "\n");
         }
         else
-            System.out.println("Cannot update task with ID = " + id + ".\n" +
+            System.out.println("Cannot update step with ID = " + id + ".\n" +
                     "Error: This id is not a step");
     }
 
@@ -110,7 +110,7 @@ public class StepService {
             entity = Database.get(id);
         }
         catch (EntityNotFoundException e) {
-            System.out.println("Cannot update task with ID = " + id + ".\n" +
+            System.out.println("Cannot update step with ID = " + id + ".\n" +
                     "Error: " + e.getMessage());
             return;
         }
@@ -124,19 +124,25 @@ public class StepService {
             try {
                 Database.update(step);
             } catch (InvalidEntityException | EntityNotFoundException | IllegalArgumentException e) {
-                System.out.println("Cannot update task with ID = " + id + ".\n" +
+                System.out.println("Cannot update step with ID = " + id + ".\n" +
                         "Error: " + e.getMessage());
                 return;
             }
 
-            System.out.println("Successfully updated the task.\n" +
+            System.out.println("* Successfully updated the step.\n" +
                     "Field: title\n" +
                     "Old Value: " + oldTitle + "\n" +
                     "New Value: " + newTitle + "\n" +
-                    "Modification Date: " + step.getLastModificationDate());
+                    "Modification Date: " + step.getLastModificationDate() + "\n");
         }
         else
-            System.out.println("Cannot update task with ID = " + id + ".\n" +
+            System.out.println("Cannot update step with ID = " + id + ".\n" +
                     "Error: This id is not a step");
+    }
+
+    public static void printStep(Step step) {
+        System.out.println("+ " + step.title + ":\n" +
+                "        ID: " + step.id + "\n" +
+                "        Status: " + step.status);
     }
 }
