@@ -21,8 +21,7 @@ public class Database {
     }
 
     public static void add(Entity e) throws InvalidEntityException {
-        Validator validator = validators.get(e.getEntityCode());
-        validator.validate(e);
+        validate(e);
 
         if (e instanceof Trackable) {
             ((Trackable) e).setCreationDate(new Date());
@@ -53,8 +52,7 @@ public class Database {
     }
 
     public static void update(Entity e) throws InvalidEntityException {
-        Validator validator = validators.get(e.getEntityCode());
-        validator.validate(e);
+        validate(e);
 
         if (e instanceof Trackable)
             ((Trackable) e).setLastModificationDate(new Date());
@@ -67,5 +65,18 @@ public class Database {
             }
         if (!contain)
             throw new EntityNotFoundException(e.id);
+    }
+
+    public static ArrayList<Entity> getAll(int entityCode) {
+        ArrayList<Entity> specialEntities = new ArrayList<>();
+        for (Entity e: entities)
+            if (e.getEntityCode() == entityCode)
+                specialEntities.add(e.copy());
+        return specialEntities;
+    }
+
+    public static void validate(Entity entity) throws InvalidEntityException {
+        Validator validator = validators.get(entity.getEntityCode());
+        validator.validate(entity);
     }
 }
