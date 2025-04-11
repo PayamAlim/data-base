@@ -60,10 +60,10 @@ public class StepService {
 
             Task taskRef = (Task) Database.get(step.taskRef);
 
-            if (taskRef.status == Task.Status.NotStarted)
-                TaskService.setAsInProgress(taskRef.id);
-            else if (TaskService.isCompleted(taskRef.id))
+            if (TaskService.isCompleted(taskRef.id))
                 TaskService.setAsCompleted(taskRef.id);
+            else if (taskRef.status == Task.Status.NotStarted)
+                TaskService.setAsInProgress(taskRef.id);
         }
         else
             System.out.println("Cannot update step with ID = " + id + ".\n" +
@@ -99,10 +99,18 @@ public class StepService {
                     "Old Value: " + oldStatus + "\n" +
                     "New Value: NotStarted" + "\n" +
                     "Modification Date: " + step.getLastModificationDate() + "\n");
+
+            Task taskRef = (Task) Database.get(step.taskRef);
+
+            if (TaskService.isNotStarted(taskRef.id))
+                TaskService.setAsNotStarted(taskRef.id);
+            else if (taskRef.status == Task.Status.Completed)
+                TaskService.setAsInProgress(taskRef.id);
         }
         else
             System.out.println("Cannot update step with ID = " + id + ".\n" +
                     "Error: This id is not a step");
+
     }
 
     public static void setTitle(int id, String newTitle) throws InvalidEntityException {
