@@ -25,7 +25,7 @@ public class Main {
                     System.out.print("Description: ");
                     String description = scn.nextLine();
 
-                    System.out.print("Due date: ");
+                    System.out.print("Due date (yyyy-mm-dd): ");
                     String date = scn.next();
                     String[] subDate = date.split("-");
                     int year = Integer.parseInt(subDate[0]);
@@ -46,11 +46,11 @@ public class Main {
                     StepService.saveStep(taskId, title);
                 }
                 else {
-                    System.out.println("There is no such operation!");
+                    System.out.println("There is no such object!");
                 }
             }
 
-            if (operation.equals("delete")) {
+            else if (operation.equals("delete")) {
                 scn.nextLine();
                 System.out.print("ID: ");
                 int id = scn.nextInt();
@@ -69,10 +69,77 @@ public class Main {
                         TaskService.removeTask(id);
                     else
                         StepService.removeStep(id);
+
+                scn.nextLine();
             }
 
-            if (operation.equals("exit"))
+            else if (operation.equals("update")) {
+                String object = scn.nextLine();
+                if (object.equals(" task")) {
+                    System.out.print("ID: ");
+                    int id = scn.nextInt();
+
+                    System.out.print("Field: ");
+                    scn.nextLine();
+                    String field = scn.nextLine();
+
+                    System.out.print("New Value ((yyyy-mm-dd) format for due date): ");
+                    String newValue = scn.nextLine();
+
+                    if (field.equals("title"))
+                        TaskService.setTitle(id, newValue);
+                    else if (field.equals("description"))
+                        TaskService.setDescription(id, newValue);
+                    else if (field.equals("status")) {
+                        if (newValue.equals("NotStarted")) TaskService.setAsNotStarted(id);
+                        if (newValue.equals("InProgress")) TaskService.setAsInProgress(id);
+                        if (newValue.equals("Completed")) TaskService.setAsCompleted(id);
+                    }
+                    else if (field.equals("due date")) {
+                        String[] subDate = newValue.split("-");
+                        int year = Integer.parseInt(subDate[0]);
+                        int month = Integer.parseInt(subDate[1]);
+                        int day = Integer.parseInt(subDate[2]);
+                        Date newDueDate = new Date(year, month, day);
+
+                        TaskService.setDueDate(id, newDueDate);
+                    }
+                    else {
+                        System.out.println("This field doesn't exist or not accessible");
+                    }
+                }
+
+                else if (object.equals(" step")) {
+                    System.out.print("ID: ");
+                    int id = scn.nextInt();
+                    scn.nextLine();
+
+                    System.out.print("Field: ");
+                    String field = scn.nextLine();
+
+                    System.out.print("New Value ((yyyy-mm-dd) format for due date): ");
+                    String newValue = scn.nextLine();
+
+                    if (field.equals("title"))
+                        StepService.setTitle(id, newValue);
+                    else if (field.equals("status")) {
+                        if (newValue.equals("NotStarted")) StepService.setAsNotStarted(id);
+                        if (newValue.equals("Completed")) StepService.setAsCompleted(id);
+                    }
+                    else {
+                        System.out.println("This field doesn't exist or not accessible");
+                    }
+                }
+
+                else
+                    System.out.println("There is no such object!");
+            }
+
+            else if (operation.equals("exit"))
                 System.out.println("Successfully logged out");
+
+            else
+                System.out.println("There is no such operation!");
         } while (!operation.equals("exit"));
     }
 }
