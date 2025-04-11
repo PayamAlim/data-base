@@ -140,6 +140,8 @@ public class Main {
 
                 ArrayList<Entity> tasks = Database.getAll(Task.TASK_ENTITY_CODE);
 
+                tasks.sort(Comparator.comparing(entity -> ((Task)entity).dueDate));
+
                 if (obj.equals(" task-by-id")) {
                     System.out.print("ID: ");
                     int id = scn.nextInt();

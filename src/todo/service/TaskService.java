@@ -292,7 +292,6 @@ public class TaskService {
 
             ArrayList<Entity> steps = Database.getAll(Step.STEP_ENTITY_CODE);
 
-
             for (Entity step: steps)
                 if (((Step) step).taskRef == id)
                     StepService.printStep((Step) step);
