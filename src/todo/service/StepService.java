@@ -24,6 +24,8 @@ public class StepService {
 
     public static void removeStep(int id) {
         Database.delete(id);
+
+        System.out.println("Step with ID = " + id + " removed successfully");
     }
 
     public static void setAsCompleted(int id) throws InvalidEntityException {

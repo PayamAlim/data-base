@@ -55,20 +55,19 @@ public class Main {
                 System.out.print("ID: ");
                 int id = scn.nextInt();
 
-                boolean hasException = false;
                 Entity entity = null;
                 try {
                     entity = Database.get(id);
                 }
                 catch (EntityNotFoundException e) {
                     System.out.println("Cannot delete entity with ID = " + id + ".\n Error: " + e.getMessage());
-                    hasException = true;
+                    return;
                 }
-                if (!hasException)
-                    if (entity instanceof Task)
-                        TaskService.removeTask(id);
-                    else
-                        StepService.removeStep(id);
+
+                if (entity instanceof Task)
+                    TaskService.removeTask(id);
+                else
+                    StepService.removeStep(id);
 
                 scn.nextLine();
             }

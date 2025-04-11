@@ -30,10 +30,13 @@ public class TaskService {
 
     public static void removeTask(int id) {
         Database.delete(id);
+
         ArrayList<Entity> steps = Database.getAll(Step.STEP_ENTITY_CODE);
         for (Entity step: steps)
-            if (step.id == id)
-                Database.delete(id);
+            if (((Step)step).taskRef == id)
+                Database.delete(step.id);
+
+        System.out.println("Task with ID = " + id + " removed successfully");
     }
 
     public static void setAsCompleted(int id) throws InvalidEntityException {
