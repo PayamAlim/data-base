@@ -94,25 +94,29 @@ public class TaskService {
         }
 
         if (entity instanceof Task) {
-            Task task = (Task) entity;
+            if (!isNotStarted(entity.id) && !isCompleted(entity.id)) {
+                Task task = (Task) entity;
 
-            String oldStatus = String.valueOf(task.status);
-            task.status = Task.Status.InProgress;
+                String oldStatus = String.valueOf(task.status);
+                task.status = Task.Status.InProgress;
 
-            try {
-                Database.update(task);
+                try {
+                    Database.update(task);
+                } catch (InvalidEntityException | EntityNotFoundException | IllegalArgumentException e) {
+                    System.out.println("Cannot update task with ID = " + id + ".\n" +
+                            "Error: " + e.getMessage());
+                    return;
+                }
+
+                System.out.println("* Successfully updated the task.\n" +
+                        "Field: status\n" +
+                        "Old Value: " + oldStatus + "\n" +
+                        "New Value: InProgress" + "\n" +
+                        "Modification Date: " + task.getLastModificationDate() + "\n");
             }
-            catch (InvalidEntityException | EntityNotFoundException | IllegalArgumentException e) {
+            else
                 System.out.println("Cannot update task with ID = " + id + ".\n" +
-                        "Error: " + e.getMessage());
-                return;
-            }
-
-            System.out.println("* Successfully updated the task.\n" +
-                    "Field: status\n" +
-                    "Old Value: " + oldStatus + "\n" +
-                    "New Value: InProgress" + "\n" +
-                    "Modification Date: " + task.getLastModificationDate() + "\n");
+                        "Error: The step's of task are all completed or all not started");
         }
         else
             System.out.println("Cannot update task with ID = " + id + ".\n" +
@@ -135,6 +139,11 @@ public class TaskService {
 
             String oldStatus = String.valueOf(task.status);
             task.status = Task.Status.NotStarted;
+
+            ArrayList<Entity> steps = Database.getAll(Step.STEP_ENTITY_CODE);
+            for (Entity step: steps)
+                if (((Step) step).taskRef == id)
+                    ((Step) step).status = Step.Status.NotStarted;
 
             try {
                 Database.update(task);
@@ -265,6 +274,14 @@ public class TaskService {
         ArrayList<Entity> steps = Database.getAll(Step.STEP_ENTITY_CODE);
         for (Entity step: steps)
             if (((Step) step).taskRef == taskId && ((Step) step).status != Step.Status.Completed)
+                return false;
+        return true;
+    }
+
+    public static boolean isNotStarted(int taskId) {
+        ArrayList<Entity> steps = Database.getAll(Step.STEP_ENTITY_CODE);
+        for (Entity step: steps)
+            if (((Step) step).taskRef == taskId && ((Step) step).status != Step.Status.NotStarted)
                 return false;
         return true;
     }

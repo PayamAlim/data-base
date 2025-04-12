@@ -124,15 +124,16 @@ public class Main {
                             TaskService.setDescription(id, newValue);
                         else if (field.equals("status")) {
                             if (newValue.equals("NotStarted")) TaskService.setAsNotStarted(id);
-                            if (newValue.equals("InProgress")) TaskService.setAsInProgress(id);
-                            if (newValue.equals("Completed")) TaskService.setAsCompleted(id);
+                            else if (newValue.equals("InProgress")) TaskService.setAsInProgress(id);
+                            else if (newValue.equals("Completed")) TaskService.setAsCompleted(id);
+                            else
+                                System.out.println("There is no such status");
                         } else if (field.equals("dueDate")) {
                             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                             Date newDueDate = formatter.parse(newValue);
                             TaskService.setDueDate(id, newDueDate);
-                        } else {
+                        } else
                             System.out.println("This field doesn't exist or is not accessible.");
-                        }
                     } catch (InputMismatchException e) {
                         System.out.println("Wrong input!");
                         scn.nextLine();
@@ -156,7 +157,9 @@ public class Main {
                             StepService.setTitle(id, newValue);
                         else if (field.equals("status")) {
                             if (newValue.equals("NotStarted")) StepService.setAsNotStarted(id);
-                            if (newValue.equals("Completed")) StepService.setAsCompleted(id);
+                            else if (newValue.equals("Completed")) StepService.setAsCompleted(id);
+                            else
+                                System.out.println("There is no such status");
                         } else {
                             System.out.println("This field doesn't exist or is not accessible.");
                         }
